@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efe & Elif - Bizim Hikayemiz 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #ff4f81;
+            --secondary-color: #ff758c;
+            --accent-color: #ff7eb3;
+            --text-dark: #2d2d2d;
+            --text-light: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffc1cc 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            padding-bottom: 70px; /* Mobilde alt menü için boşluk */
+        }
+
+        /* Özelleştirilmiş Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #ffe5ec; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+        /* -----------------------------------------
+           DİNAMİK UÇUŞAN KALPLER
+        ----------------------------------------- */
+        #heart-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999;
+        }
+
+        .floating-heart {
+            position: absolute; color: var(--primary-color); opacity: 0.6; animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* -----------------------------------------
+           NAVIGASYON BAR (MASAÜSTÜ)
+        ----------------------------------------- */
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px; display: flex; gap: 20px; z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 8px 32px rgba(255, 79, 129, 0.15);
+        }
+
+        nav a { text-decoration: none; color: #7d4454; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 6px; }
+        nav a:hover { color: var(--primary-color); transform: scale(1.05); }
+
+        /* -----------------------------------------
+           GENEL BÖLÜM STİLLERİ
+        ----------------------------------------- */
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 60px 20px; position: relative; }
+        .section-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #c72c41; text-align: center; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05); }
+        .card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px; padding: 40px; width: 100%; max-width: 900px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05); }
+
+        /* -----------------------------------------
+           1. GİRİŞ (HERO) BÖLÜMÜ
+        ----------------------------------------- */
+        #home {
+            background: linear-gradient(rgba(255, 192, 203, 0.4), rgba(255, 182, 193, 0.4)), url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            text-align: center;
+        }
+
+        .hero-box h1 { font-family: 'Dancing Script', cursive; font-size: 5.5rem; color: var(--text-light); text-shadow: 0 4px 15px rgba(199, 44, 65, 0.6); margin-bottom: 10px; animation: pulse 2.5s infinite alternate; }
+        .hero-box p { color: var(--text-light); font-size: 1.5rem; font-weight: 300; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); margin-bottom: 40px; }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
+
+        /* Büyük Kalp Buton */
+        .heart-btn { width: 140px; height: 140px; background: var(--primary-color); position: relative; transform: rotate(-45deg); margin: 60px auto 0 auto; cursor: pointer; transition: all 0.4s ease; box-shadow: 0 10px 30px rgba(255, 79, 129, 0.5); display: flex; justify-content: center; align-items: center; text-decoration: none; }
+        .heart-btn::before, .heart-btn::after { content: ''; width: 140px; height: 140px; background: var(--primary-color); border-radius: 50%; position: absolute; transition: all 0.4s ease; }
+        .heart-btn::before { top: -70px; left: 0; } .heart-btn::after { left: 70px; top: 0; }
+        .heart-btn span { transform: rotate(45deg); color: white; font-weight: 600; font-size: 1.1rem; z-index: 10; text-align: center; }
+        .heart-btn:hover { transform: rotate(-45deg) scale(1.1); background: #ff3366; } .heart-btn:hover::before, .heart-btn:hover::after { background: #ff3366; }
+
+        /* -----------------------------------------
+           2. AŞK SAYAÇ BÖLÜMÜ
+        ----------------------------------------- */
+        #counter-section { background: #ffebee; }
+        .counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; margin-top: 30px; }
+        .counter-box { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 8px 20px rgba(255, 79, 129, 0.08); border: 1px solid #ffdae0; }
+        .counter-number { font-size: 3rem; font-weight: 700; color: var(--primary-color); display: block; }
+        .counter-label { font-size: 0.9rem; color: #7d4454; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .counter-info-text { text-align: center; margin-top: 35px; font-size: 1.2rem; font-style: italic; color: #5d4037; }
+
+        /* -----------------------------------------
+           3. HİKAYEMİZ (ZAMAN TÜNELİ) BÖLÜMÜ
+        ----------------------------------------- */
+        #timeline-section { background: #fff0f3; }
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::after { content: ''; position: absolute; width: 4px; background-color: var(--secondary-color); top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px; }
+        .timeline-item { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
+        .timeline-item::after { content: '❤'; position: absolute; width: 24px; height: 24px; right: -14px; background-color: #fff; border: 2px solid var(--primary-color); top: 15px; border-radius: 50%; z-index: 1; text-align: center; font-size: 12px; line-height: 22px; color: var(--primary-color); }
+        .left { left: 0; } .right { left: 50%; } .right::after { left: -10px; }
+        .timeline-content { padding: 20px 30px; background: white; position: relative; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #ffdae0; }
+        .timeline-date { font-weight: 700; color: var(--primary-color); margin-bottom: 5px; font-size: 1.1rem; }
+        .timeline-content h3 { font-size: 1.3rem; margin-bottom: 10px; color: #c72c41; }
+        .timeline-content p { font-size: 0.95rem; color: #5a5a5a; line-height: 1.5; }
+
+        /* -----------------------------------------
+           4. MEKTUP & MESAJ BÖLÜMÜ
+        ----------------------------------------- */
+        #message-section { background: linear-gradient(rgba(255, 240, 243, 0.85), rgba(255, 240, 243, 0.85)), url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat; text-align: center; }
+        .letter-box { max-width: 650px; margin: 0 auto; }
+        .letter-box p { font-size: 1.15rem; line-height: 2; color: #4a4a4a; margin-bottom: 25px; }
+        .letter-signature { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--primary-color); margin-top: 30px; }
+        .surprise-btn { background: var(--primary-color); color: white; border: none; padding: 14px 35px; font-size: 1.1rem; font-weight: 600; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 79, 129, 0.3); transition: all 0.3s ease; margin-top: 20px; }
+        .surprise-btn:hover { background: #ff2a61; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 79, 129, 0.4); }
+
+        /* Sürpriz Popup Penceresi */
+        .popup-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); z-index: 2500; display: none; justify-content: center; align-items: center; }
+        .popup-content { background: white; padding: 40px; border-radius: 24px; max-width: 500px; width: 90%; text-align: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 2px solid var(--accent-color); }
+        .popup-content h3 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--primary-color); margin-bottom: 15px; }
+        .popup-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+
+        /* -----------------------------------------
+           AÇILIŞ POP-UP EKRANI (DUYGUSAL MESAJ)
+        ----------------------------------------- */
+        #welcome-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            z-index: 3000; display: flex; justify-content: center; align-items: center;
+        }
+
+        .welcome-content {
+            background: #fff; padding: 50px 40px; border-radius: 20px;
+            max-width: 600px; width: 90%; text-align: center;
+            box-shadow: 0 0 50px rgba(255, 79, 129, 0.5); border: 3px solid #ffdae0;
+            animation: popIn 0.8s ease forwards;
+        }
+
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .welcome-content h2 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
+        .welcome-content p { font-size: 1.15rem; line-height: 1.9; color: #4a4a4a; margin-bottom: 30px; text-align: justify; }
+        
+        .welcome-btn {
+            background: var(--primary-color); color: white; border: none; padding: 15px 40px;
+            font-size: 1.2rem; font-weight: 600; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 79, 129, 0.4); transition: all 0.3s ease;
+        }
+        .welcome-btn:hover { background: #ff2a61; transform: scale(1.05); }
+
+        /* -----------------------------------------
+           MÜZİK BUTONU
+        ----------------------------------------- */
+        .music-btn {
+            position: fixed; bottom: 90px; /* Mobilde alt menüyle çakışmasın diye yukarı alındı */
+            right: 20px; width: 55px; height: 55px;
+            background: var(--primary-color); color: white; border: none; border-radius: 50%;
+            font-size: 1.3rem; cursor: pointer; z-index: 2000; box-shadow: 0 5px 15px rgba(255, 79, 129, 0.5);
+            display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;
+            animation: pulse-music 2s infinite alternate;
+        }
+        .music-btn:hover { transform: scale(1.1) rotate(10deg); background: #ff2a61; }
+        @keyframes pulse-music { 0% { box-shadow: 0 0 0 0 rgba(255, 79, 129, 0.7); } 100% { box-shadow: 0 0 0 15px rgba(255, 79, 129, 0); } }
+
+        /* -----------------------------------------
+           RESPONSIVE (MOBİL UYUMLULUK VE YENİ MENÜ)
+        ----------------------------------------- */
+        @media (max-width: 768px) {
+            /* Menüyü Alta Sabitle (Bottom Navigation) */
+            nav {
+                top: auto;
+                bottom: 15px;
+                width: 90%;
+                justify-content: space-between;
+                padding: 15px 25px;
+                background: rgba(255, 255, 255, 0.85);
+                box-shadow: 0 -5px 20px rgba(255, 79, 129, 0.2);
+            }
+            
+            nav a {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            nav a span { 
+                display: block; 
+                font-size: 0.65rem; /* Yazıları küçültüp ikonun altına aldık */
+                font-weight: 400;
+            } 
+            
+            nav a i {
+                font-size: 1.3rem; /* İkonlar daha belirgin */
+            }
+
+            .hero-box h1 { font-size: 3.5rem; }
+            .counter-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item.right { left: 0; }
+            .timeline-item::after { left: 18px; right: auto; }
+            .timeline-item.right::after { left: 18px; }
+            .welcome-content { padding: 30px 20px; }
+            .welcome-content h2 { font-size: 2.5rem; }
+            .welcome-content p { font-size: 1rem; }
+            .music-btn { bottom: 90px; right: 20px; width: 45px; height: 45px; font-size: 1.1rem; } /* Müzik butonunu mobilde küçülttük ve yukarı çektik */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-modal">
+        <div class="welcome-content">
+            <h2>Güzel Sevgilim... 🌸</h2>
+            <p>
+                Şu an aramızın bozuk olduğunu ve birbirimizi kırdığımızı biliyorum. Öfkeyle birbirimize ağır konuşmuş olabiliriz ama günün sonunda gözümü kapattığımda yine sadece birlikte olduğumuzu, biz olduğumuzu görüyorum. 
+                <br><br>
+                Seni çok seviyorum. Evet, bazen birbirimize sinirleniyoruz, kavgalar ediyoruz ama inan bu tartışmalar sana olan sevgimden tek bir gram bile eksiltmiyor. Aksine, seni kaybetme korkusu içimdeki sevgiyi ve sana olan bağlılığımı daha da büyütüyor. 
+                <br><br>
+                Seni her halinle, her anımızla seviyorum. ❤️
+            </p>
+            <button class="welcome-btn" onclick="closeWelcomeModal()">Seni Seviyorum, İçeri Geçelim 💖</button>
+        </div>
+    </div>
+
+    <div id="heart-container"></div>
+    
+    <audio id="bg-music" loop>
+        <source src="ilove.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="music-btn" class="music-btn" onclick="toggleMusic()">
+        <i class="fa-solid fa-music"></i>
+    </button>
+
+    <nav>
+        <a href="#home"><i class="fa-solid fa-house"></i> <span>Giriş</span></a>
+        <a href="#counter-section"><i class="fa-solid fa-heart"></i> <span>Sayacımız</span></a>
+        <a href="#timeline-section"><i class="fa-solid fa-calendar-days"></i> <span>Hikayemiz</span></a>
+        <a href="fotograflar.html"><i class="fa-solid fa-images"></i> <span>Albümümüz</span></a>
+        <a href="videolar.html"><i class="fa-solid fa-video"></i> <span>Videolarımız</span></a>
+    </nav>
+
+    <section id="home">
+        <div class="hero-box">
+            <h1>Efe & Elif</h1>
+            <p>Bizim Sonsuz Aşk Hikayemiz 💕</p>
+            
+            <a href="#counter-section" class="heart-btn">
+                <span>Hikayemizi<br>Gör 💌</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="counter-section">
+        <h2 class="section-title">Ne Kadar Zamandır Biziz?</h2>
+        <div class="card">
+            <div class="counter-grid">
+                <div class="counter-box">
+                    <span class="counter-number" id="days">00</span>
+                    <span class="counter-label">Gün</span>
+                </div>
+                <div class="counter-box">
+                    <span class="counter-number" id="hours">00</span>
+                    <span class="counter-label">Saat</span>
+                </div>
+                <div class="counter-box">
+                    <span class="counter-number" id="minutes">00</span>
+                    <span class="counter-label">Dakika</span>
+                </div>
+                <div class="counter-box">
+                    <span class="counter-number" id="seconds">00</span>
+                    <span class="counter-label">Saniye</span>
+                </div>
+            </div>
+            <p class="counter-info-text">
+                "Seninle geçirdiğim her saniye, hayatımın en değerli anı..."
+            </p>
+        </div>
+    </section>
+
+    <section id="timeline-section">
+        <h2 class="section-title">Aşkımızın Kilometre Taşları</h2>
+        <div class="timeline">
+            
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-date">19 Haziran 2025</div>
+                    <h3>İlk Karşılaşma ✨</h3>
+                    <p>Gözlerinin gözlerime ilk değdiği, dünyadaki tüm seslerin kısıldığı ve kalbimin ritminin tamamen değiştiği o mucizevi gün.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-date">7 Temmuz 2025</div>
+                    <h3>"Biz" Olduğumuz Gün 💕</h3>
+                    <p>Ellerini ilk kez tuttuğum ve hayatımın geri kalanını seninle geçirmek istediğimden tamamen emin olduğum, emin olduğum o an.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <div class="timeline-date">Belirsiz Ama Unutulmaz</div>
+                    <h3>İlk "Seni Seviyorum" 🌌</h3>
+                    <p>Kelimelerin boğazımda düğümlendiği ama gözlerimizin her şeyi anlattığı, kalplerimizin sonsuza dek birleştiği o büyüleyici an.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <div class="timeline-date">Bugün</div>
+                    <h3>Hala İlk Günkü Aşkla... 🌹</h3>
+                    <p>Zaman geçiyor, anılarımız çoğalıyor ama sana olan sevgim her geçen gün katlanarak büyümeye devam ediyor. Sonsuza dek...</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="message-section">
+        <h2 class="section-title">Elif'ime Küçük Bir Not</h2>
+        <div class="card letter-box">
+            <p>
+                Hayatıma girdiğin andan itibaren her şey o kadar güzelleşti ki... Seninle gülmeyi, seninle dertleşmeyi, seninle hiçbir şey yapmadan sadece durmayı bile çok seviyorum. 
+            </p>
+            <p>
+                Bu web sitesi, sana olan aşkımın dijital bir hediyesi olsun istedim. Kalbimin ritmini değiştiren kadın, iyi ki varsın, iyi ki benimsin.
+            </p>
+            <div class="letter-signature">Seni Çok Seviyorum...</div>
+            
+            <button class="surprise-btn" onclick="openSurprise()">Bana Tıkla Sevgilim 🎁</button>
+        </div>
+    </section>
+
+    <div class="popup-modal" id="surpriseModal">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closeSurprise()">&times;</span>
+            <h3>Sonsuza Dek! ♾</h3>
+            <p style="margin-top: 15px; font-size: 1.1rem; color: #4a4a4a;">
+                Bugün, yarın ve hayatımın geri kalan her gününde seni sevmeye devam edeceğime söz veriyorum. Sen benim başıma gelen en güzel şeysin! 💖
+            </p>
+            <div style="font-size: 3rem; margin-top: 15px; color: var(--primary-color);">💞</div>
+        </div>
+    </div>
+
+    <script>
+        function closeWelcomeModal() {
+            document.getElementById('welcome-modal').style.display = 'none';
+        }
+
+        const anniversaryDate = new Date(2025, 6, 7, 0, 0, 0); 
+
+        function updateLoveCounter() {
+            const now = new Date();
+            const difference = now - anniversaryDate;
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        setInterval(updateLoveCounter, 1000);
+        updateLoveCounter(); 
+
+        function createFloatingHeart() {
+            const container = document.getElementById('heart-container');
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            
+            const heartTypes = ['💖', '💕', '💗', '💞', '💓', '❤', '💘'];
+            heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            
+            const duration = Math.random() * 5 + 5;
+            heart.style.animationDuration = duration + 's';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFloatingHeart, 400);
+
+        function openSurprise() {
+            document.getElementById('surpriseModal').style.display = 'flex';
+        }
+
+        function closeSurprise() {
+            document.getElementById('surpriseModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('surpriseModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const isPlaying = localStorage.getItem('musicPlaying') === 'true';
+            const musicTime = localStorage.getItem('musicTime') || 0;
+
+            if (musicTime > 0) {
+                bgMusic.currentTime = parseFloat(musicTime);
+            }
+
+            if (isPlaying) {
+                let playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    }).catch(error => {
+                        localStorage.setItem('musicPlaying', 'false');
+                        musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+                    });
+                }
+            }
+        });
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                localStorage.setItem('musicPlaying', 'true');
+            } else {
+                bgMusic.pause();
+                musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+                localStorage.setItem('musicPlaying', 'false');
+            }
+        }
+
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('musicTime', bgMusic.currentTime);
+        });
+    </script>
+</body>
+</html>

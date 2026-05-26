@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efe & Elif - Videolarımız 🎬</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --primary-color: #ff4f81; --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffc1cc 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-gradient); overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 70px; /* Mobilde alt menü için boşluk */ }
+        
+        /* -----------------------------------------
+           DİNAMİK UÇUŞAN KALPLER
+        ----------------------------------------- */
+        #heart-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999; }
+        .floating-heart { position: absolute; color: var(--primary-color); opacity: 0.6; animation: floatUp linear forwards; }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Navigasyon (Masaüstü) */
+        nav { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(15px); padding: 12px 30px; border-radius: 50px; display: flex; gap: 20px; z-index: 1000; border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 8px 32px rgba(255, 79, 129, 0.15); }
+        nav a { text-decoration: none; color: #7d4454; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 6px; }
+        nav a:hover, nav a.active { color: var(--primary-color); transform: scale(1.05); }
+
+        /* Video Sayfası İçerik */
+        .page-container { flex: 1; padding: 120px 20px 60px 20px; max-width: 1000px; margin: 0 auto; text-align: center; z-index: 10; position: relative; }
+        .section-title { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #c72c41; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05); }
+        
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; }
+
+        /* -----------------------------------------
+           YENİ POLAROİD VİDEO KARTI
+        ----------------------------------------- */
+        .video-card.polaroid-memory {
+            background: #fff; /* Polaroid beyazı */
+            padding: 10px; /* Üst ve yanlar, video için */
+            padding-bottom: 50px; /* Alt kısım, başlık için polaroid boşluğu */
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(255, 79, 129, 0.1); /* Hafif pembe gölge */
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-card.polaroid-memory video {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .video-card.polaroid-memory .video-title {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            font-family: 'Dancing Script', cursive; /* El yazısı fontu */
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        /* Polaroid Hover Etkisi */
+        .video-card.polaroid-memory:hover {
+            transform: rotate(-3deg) scale(1.05); /* Döndürme ve büyüme */
+            box-shadow: 0 10px 25px rgba(255, 79, 129, 0.3); /* Pembe parıltı */
+        }
+
+        /* Alt Kısım Romantik Yazı */
+        .romantic-footer {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            position: relative;
+            z-index: 10;
+        }
+        .romantic-footer p {
+            font-size: 1.1rem;
+            color: #5d4037;
+            line-height: 1.8;
+            font-style: italic;
+        }
+        .romantic-footer span {
+            display: block;
+            margin-top: 15px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        /* -----------------------------------------
+           MÜZİK BUTONU
+        ----------------------------------------- */
+        .music-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 55px;
+            height: 55px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 2000;
+            box-shadow: 0 5px 15px rgba(255, 79, 129, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: pulse-music 2s infinite alternate;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            background: #ff2a61;
+        }
+
+        @keyframes pulse-music {
+            0% { box-shadow: 0 0 0 0 rgba(255, 79, 129, 0.7); }
+            100% { box-shadow: 0 0 0 15px rgba(255, 79, 129, 0); }
+        }
+
+        /* -----------------------------------------
+           RESPONSIVE (MOBİL UYUMLULUK VE YENİ MENÜ)
+        ----------------------------------------- */
+        @media (max-width: 768px) {
+            /* Menüyü Alta Sabitle (Bottom Navigation) */
+            nav {
+                top: auto;
+                bottom: 15px;
+                width: 90%;
+                justify-content: space-around; /* Butonları eşit dağıt */
+                padding: 15px 25px;
+                background: rgba(255, 255, 255, 0.85);
+                box-shadow: 0 -5px 20px rgba(255, 79, 129, 0.2);
+            }
+            
+            nav a {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            nav a span { 
+                display: block; 
+                font-size: 0.65rem; 
+                font-weight: 400;
+            } 
+            
+            nav a i {
+                font-size: 1.3rem; 
+            }
+
+            .video-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 2.8rem; }
+            .music-btn { bottom: 90px; right: 20px; width: 45px; height: 45px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="heart-container"></div>
+    <audio id="bg-music" loop>
+        <source src="ilove.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="music-btn" class="music-btn" onclick="toggleMusic()">
+        <i class="fa-solid fa-music"></i>
+    </button>
+
+    <nav>
+        <a href="efeelif.html"><i class="fa-solid fa-house"></i> <span>Giriş</span></a>
+        <a href="fotograflar.html"><i class="fa-solid fa-images"></i> <span>Albümümüz</span></a>
+        <a href="videolar.html" class="active"><i class="fa-solid fa-video"></i> <span>Videolarımız</span></a>
+    </nav>
+
+    <div class="page-container">
+        <h2 class="section-title">Birlikte Güldüğümüz Anlar 🎬</h2>
+        
+        <div class="video-grid">
+            <div class="video-card polaroid-memory">
+                <video controls preload="metadata">
+                    <source src="video/video1.mp4" type="video/mp4">
+                    Tarayıcınız video etiketini desteklemiyor.
+                </video>
+                <div class="video-title">İlk Karşılaşma ❤</div>
+            </div>
+
+            <div class="video-card polaroid-memory">
+                <video controls preload="metadata">
+                    <source src="video/video2.mp4" type="video/mp4">
+                </video>
+                <div class="video-title">İlk uzun ayrılık 😢</div>
+            </div>
+
+            <div class="video-card polaroid-memory">
+                <video controls preload="metadata">
+                    <source src="video/video3.mp4" type="video/mp4">
+                </video>
+                <div class="video-title">Aldığım ilk çiçek 💐</div>
+            </div>
+            
+            <div class="video-card polaroid-memory">
+                <video controls preload="metadata">
+                    <source src="video/video5.mp4" type="video/mp4">
+                </video>
+                <div class="video-title">Sevgi Dolu Anılarımız 💕</div>
+            </div>
+        </div>
+
+        <div class="romantic-footer">
+            <p>
+                "Bazen bir saniyelik bir video, binlerce kelimenin anlatamadığı mutluluğu anlatır. 
+                Seninle geçen her an, benim en sevdiğim film sahnem gibi. 
+                Gülüşünün kayda geçtiği her anı, sonsuza kadar saklamak istiyorum."
+            </p>
+            <span>Seninle her şey çok güzel...</span>
+        </div>
+    </div>
+
+    <script>
+        function createFloatingHeart() {
+            const container = document.getElementById('heart-container');
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            
+            const heartTypes = ['💖', '💕', '💗', '💞', '💓', '❤', '💘', '🎬'];
+            heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            
+            const duration = Math.random() * 5 + 5;
+            heart.style.animationDuration = duration + 's';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createFloatingHeart, 400);
+
+
+        // -----------------------------------------
+        // AKILLI MÜZİK ÇALAR (SAYFALAR ARASI HAFIZA)
+        // -----------------------------------------
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        // Sayfa yüklendiğinde müziğin durumunu kontrol et
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const isPlaying = localStorage.getItem('musicPlaying') === 'true';
+            const musicTime = localStorage.getItem('musicTime') || 0;
+
+            // Müziği kalınan saniyeye ayarla
+            if (musicTime > 0) {
+                bgMusic.currentTime = parseFloat(musicTime);
+            }
+
+            // Eğer önceki sayfada müzik çalıyorsa, bu sayfada da çalmaya devam et
+            if (isPlaying) {
+                let playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    }).catch(error => {
+                        // Tarayıcı otomatik oynatmayı engellerse (ilk girişte olabilir)
+                        localStorage.setItem('musicPlaying', 'false');
+                        musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+                    });
+                }
+            }
+        });
+
+        // Müzik Başlat / Durdur Butonu
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                localStorage.setItem('musicPlaying', 'true');
+            } else {
+                bgMusic.pause();
+                musicBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
+                localStorage.setItem('musicPlaying', 'false');
+            }
+        }
+
+        // Sayfa değiştirilirken şarkının saniyesini kaydet
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('musicTime', bgMusic.currentTime);
+        });
+    </script>
+</body>
+</html>
